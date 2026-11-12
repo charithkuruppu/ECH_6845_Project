@@ -20,31 +20,6 @@ The original PropMolFlow paper and model are described here:
 
 ---
 
-## What's New vs. the Original
-
-| Feature | Original PropMolFlow | MultiPropGen |
-|---|---|---|
-| Single-property conditioning | Yes | Yes |
-| Multi-property conditioning | No | **Yes** (`FlowMolMutli`) |
-| Network backbone | GVP message passing | GVP (default) or **transformer** (`vector_field.backbone`) |
-
-### New / modified files
-
-| File | What changed |
-|---|---|
-| `multipropgen/models/flowmol_multi.py` | New class `FlowMolMutli`: multi-property version of `FlowMol` with per-property `PropertyEmbedder` dict and `CTMCVectorFieldMulti` |
-| `multipropgen/models/ctmc_vector_field_multi.py` | New `CTMCVectorFieldMulti`: handles multi-property embedding during training and sampling |
-| `train.py` | Selects `FlowMolMutli` automatically when the config sets `model_setting.property_names` |
-| `sample_condition.py` | `--sample-multi` flag for sampling from a multi-property checkpoint |
-| `configs/multi_properties/` | Example configs for multi-property training |
-| `multi_porp2size/` | Multi-property joint histogram sampler for generating correlated (size, property) pairs |
-| `multipropgen/models/transformer_backbone.py` | New `TransformerBackbone`: transformer blocks + equivariant coordinate updates (see [Transformer Backbone](#transformer-backbone)) |
-| `multipropgen/models/vector_field.py` | `backbone` / `transformer` settings; the GVP loop now lives in `_run_backbone()` (unchanged behaviour) |
-| `multipropgen/models/ctmc_vector_field.py`, `ctmc_vector_field_multi.py` | Call `_run_backbone()` instead of their own copies of the GVP loop |
-| `configs/multi_properties/gap_mu_concatenate_sum_transformer.yaml` | Example config: `gap_mu_concatenate_sum.yaml` with the transformer backbone |
-
----
-
 ## Installation
 
 ```bash
@@ -288,3 +263,33 @@ If you use this code, please cite the original PropMolFlow paper:
 ## Acknowledgements
 
 Built on top of [PropMolFlow](https://github.com/Liu-Group-UF/PropMolFlow) and [FlowMol](https://github.com/Dunni3/FlowMol).
+
+---
+
+## License
+
+This project is derived from PropMolFlow and is distributed under the same MIT License.
+
+```
+MIT License
+
+Copyright (c) 2025 Liu's Group
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
