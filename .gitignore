@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Data and checkpoints (too large for git)
+data/
+checkpoints/
+trained_models/
+runs_qm9_valid/
+runs_*/
+
+# Sampling outputs
+sampling_input/
+sampling_result/
+prediction_result/
+
+# QM9 raw data
+qm9-sdf-data/
+*.zip
+*.tar
+*.sdf
+
+# ML artifacts
+lightning_logs/
+wandb/
+*.ckpt
+*.pt
+*.pth
+
+# Job outputs
+*.out
+*.sh
+
+# Misc
+*.png
+!assets/*.png
+*.jpg
+# SLURM logs and run outputs
+slurmoutputs/
+*.err
+*.log
+results/
+
+# Generated arrays / pickles
+*.npz
+*.npy
+*.pkl
+*.pkl.gz

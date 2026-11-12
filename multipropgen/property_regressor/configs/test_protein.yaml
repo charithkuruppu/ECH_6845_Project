@@ -1,0 +1,33 @@
+dataset:
+  atom_map:
+  - C
+  - N
+  - O
+  - F
+  - P
+  - S
+  - Cl
+  - Br
+  - I
+  processed_data_dir: data/protein/
+  dataset_name: protein
+mol_fm:
+  parameterization: ctmc
+  prior_config:
+    a:
+      align: false
+      kwargs: {}
+      type: ctmc
+    c:
+      align: false
+      kwargs: {}
+      type: ctmc
+    e:
+      align: false
+      kwargs: {}
+      type: ctmc
+    x:
+      align: true
+      kwargs:
+        std: 1.0
+      type: centered-normal

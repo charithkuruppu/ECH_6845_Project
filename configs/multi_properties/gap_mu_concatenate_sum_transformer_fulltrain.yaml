@@ -1,0 +1,134 @@
+checkpointing:
+  every_n_epochs: 1
+  monitor: val_total_loss
+  save_last: true
+  save_top_k: 3
+dataset:
+  atom_map:
+  - C
+  - H
+  - N
+  - O
+  - F
+  dataset_name: qm9
+  dataset_size: null
+  processed_data_dir: data/qm9
+  raw_data_dir: data/qm9_raw
+  conditioning:
+    enabled: true
+    properties: ['gap', 'mu']
+    normalize: true
+  use_all_training_set: true        # all 100,000 training molecules (train_a + train_b)
+model_setting:
+  property_names: ['gap', 'mu']
+  property_embedding_dim: 256
+  properties_handle_method: concatenate_sum
+  gaussian_expansion:
+    enabled: false
+    n_gaussians: 5
+interpolant_scheduler:
+  cosine_params:
+    a: 2
+    c: 2
+    e: 1.5
+    x: 1
+  schedule_type:
+    a: linear
+    c: linear
+    e: linear
+    x: linear
+lr_scheduler:
+  base_lr: 0.00025
+  restart_interval: 0
+  restart_type: linear
+  warmup_length: 0.0
+  weight_decay: 1.0e-12
+mol_fm:
+  parameterization: ctmc
+  prior_config:
+    a:
+      align: false
+      kwargs: {}
+      type: ctmc
+    c:
+      align: false
+      kwargs: {}
+      type: ctmc
+    e:
+      align: false
+      kwargs: {}
+      type: ctmc
+    x:
+      align: true
+      kwargs:
+        std: 1.0
+      type: centered-normal
+  target_blur: 0.0
+  time_scaled_loss: false
+  total_loss_weights:
+    a: 0.4
+    c: 1.0
+    e: 2.0
+    x: 3.0
+  weight_ae: false
+resume:
+  run_id: paiokchu
+training:
+  batch_size: 128
+  evaluation:
+    mols_to_sample: 128
+    sample_interval: 0.2
+    val_loss_interval: 0.2
+  max_num_edges: 400000.0
+  num_workers: 8
+  output_dir: runs_qm9_valid/
+  trainer_args:
+    accelerator: gpu
+    accumulate_grad_batches: 1
+    devices: 1
+    gradient_clip_algorithm: value
+    gradient_clip_val: 1.0
+    limit_val_batches: 0.1
+    max_epochs: 2000
+    num_nodes: 1
+    strategy: auto
+vector_field:
+  # Backbone that processes the molecule inside the vector field:
+  #   gvp         - original PropMolFlow GVP message passing (what every other config uses)
+  #   transformer - Megalodon-inspired transformer blocks alternating with equivariant
+  #                 geometry updates (multipropgen/models/transformer_backbone.py)
+  backbone: transformer
+  transformer:
+    n_layers: 8                # (transformer block -> geometry update) pairs
+    n_heads: 8                 # attention heads; n_hidden_scalars must be divisible by this
+    mlp_ratio: 4.0             # feed-forward width = mlp_ratio * feature size
+    pair_bias: true            # bond + distance features bias the attention scores
+    use_cross_product: true    # chirality-aware cross-product term in the coordinate update
+    coord_update_clamp: 10.0   # max per-edge coordinate-update coefficient
+  # shared by both backbones
+  n_hidden_scalars: 256        # atom feature size
+  n_hidden_edge_feats: 128     # bond feature size
+  rbf_dim: 32                  # radial basis functions used to encode distances
+  rbf_dmax: 14
+  n_recycles: 1
+  # CTMC sampling settings (unchanged)
+  high_confidence_threshold: 0.0
+  stochasticity: 10.0
+  # GVP backbone only - ignored by the transformer (kept so that switching back to
+  # backbone: gvp reproduces gap_mu_concatenate_sum.yaml exactly)
+  convs_per_update: 1
+  message_norm: 100
+  n_cp_feats: 4
+  n_message_gvps: 3
+  n_molecule_updates: 8
+  n_update_gvps: 3
+  n_vec_channels: 16
+  separate_mol_updaters: true
+  update_edge_w_distance: true
+wandb:
+  entity: jerryjin0707
+  id: qm9-transformer-gap_mu-concatenate_sum-fulltrain
+  mode: offline
+  name: qm9-ctmc-transformer-gap_mu-concatenate_sum-fulltrain
+  project: mol-fm
+  save_dir: runs_qm9_valid
