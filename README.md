@@ -194,6 +194,22 @@ Each layer is:
 
 Attention is computed over the edges of the batched DGL graph, which is fully connected within each molecule, so it is exact per-molecule attention with no padding. With the example settings the transformer backbone has about 19 M parameters versus about 6.6 M for the default GVP backbone; reduce `n_layers` or `mlp_ratio` for a size-matched comparison.
 
+### Parameter comparison
+
+| Architecture | Parameters |
+|---|---:|
+| Original GVP backbone | ~6.6 million |
+| New Transformer backbone | ~19 million |
+| **Additional parameters** | **~12.4 million** |
+
+```mermaid
+xychart-beta
+    title "Model parameter comparison (millions, approximate)"
+    x-axis ["GVP", "Transformer"]
+    y-axis "Parameters (M)" 0 --> 20
+    bar [6.6, 19]
+```
+
 ---
 
 ## Model Class Hierarchy
