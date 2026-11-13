@@ -18,6 +18,15 @@
 The original PropMolFlow paper and model are described here:
 > *PropMolFlow: Property-guided Molecule Generation with Geometry-Complete Flow Matching* — Zeng et al., 2025. [[arXiv]](https://arxiv.org/abs/2505.21469) [[Nature Computational Science]](https://www.nature.com/articles/s43588-025-00946-y)
 
+<p align="center">
+  <img src="assets/propmolflow_gvp_overview.png" alt="Original PropMolFlow architecture: single-property conditioning with a GVP-based SE(3)-equivariant graph neural network" width="900">
+</p>
+
+**Figure: the original PropMolFlow architecture (baseline).** Reproduced from Zeng et al. (2025), cited above; © the authors.
+The noisy molecule is turned into a molecular graph of edge bond features, node position features and node scalar features. **One** molecular property (μ, α, …, C<sub>v</sub>) is passed through a Gaussian expansion (G.E.) and an MLP to give a property embedding, which is combined with the node scalar features. An SE(3)-equivariant graph neural network — the **GVP message-passing** network — then predicts the clean molecule.
+
+Two differences carry through to MultiPropGen: the baseline conditions on **a single property at a time**, where MultiPropGen embeds each of several properties separately and concatenates them (panel **d** above); and the baseline's backbone is **GVP**, which MultiPropGen keeps as the default while adding the transformer as an opt-in alternative. Selecting `backbone: gvp` reproduces this network exactly.
+
 ---
 
 ## Installation
